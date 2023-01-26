@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from './Modal/Modal';
 import css from './App.module.css';
 import Loader from './Loader/Loader';
-import * as API from 'seervices/api';
+import * as API from 'services/api';
 import Errors from './Errors/Errors';
 import Button from './Button/Button';
 import Searchbar from './Searchbar/Searchbar.jsx';
