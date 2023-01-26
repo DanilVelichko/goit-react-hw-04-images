@@ -3,29 +3,23 @@ import PropTypes from 'prop-types';
 import css from './ImageGallery.module.css';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 
-class ImageGallery extends React.Component {
-  handleImageClick = (e) => {
-     this.props.clickImage(e.target.id)
-  }
-  render() {
-    const { images } = this.props;
-    return (
-      <ul className={css.gallery} onClick={this.handleImageClick}>
-        {images.map(image => {
-          return (
-            <ImageGalleryItem
-              id={image.id}
-              key={image.id}
-              smallFoto={image.webformatURL}
-              largeFoto={image.largeImageURL}
-              alt={image.tags}
-            />
-          );
-        })}
-      </ul>
-    );
-  }
-}
+const ImageGallery = ({ images, clickImage }) => {
+  return (
+    <ul className={css.gallery} onClick={e => clickImage(e.target.id)}>
+      {images.map(({ id, webformatURL, largeImageURL, tags }) => {
+        return (
+          <ImageGalleryItem
+            id={id}
+            key={id}
+            smallFoto={webformatURL}
+            largeFoto={largeImageURL}
+            alt={tags}
+          />
+        );
+      })}
+    </ul>
+  );
+};
 
 ImageGallery.propTypes = {
   images: PropTypes.arrayOf(
