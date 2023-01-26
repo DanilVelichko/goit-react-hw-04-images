@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Modal from './Modal/Modal';
 import css from './App.module.css';
 import Loader from './Loader/Loader';
@@ -8,140 +8,94 @@ import Button from './Button/Button';
 import Searchbar from './Searchbar/Searchbar.jsx';
 import ImageGallery from './ImageGallery/ImageGallery';
 
-export class App extends React.Component {
-  state = {
-    inputSearch: 'random',
-    response: [],
-    loading: false,
-    pageNumber: 1,
-    button: false,
-    modal: false,
-    largeImageUrl: '',
-    errorMessage: false,
-    isLoading: false,
+const App = () => {
+  const [inputSearch, setInputSearch] = useState('');
+  const [response, setResponse] = useState([]);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [button, setButton] = useState(false);
+  const [modal, setModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [largeImageUrl, setLargeImageUrl] = useState('');
+
+  const formSubmitHandler = input => {
+    cleanState();
+    setInputSearch(input);
   };
 
-  formSubmitHandler = input => {
-    this.cleanState();
+  const getFotos = async input => {
+    setIsLoading(true);
 
-    this.setState({
-      inputSearch: input,
-    });
-
-    if (this.state.inputSearch === '') {
-      this.setState({
-      inputSearch: 'random',
-    });
-    }
-  };
-
-  getFotos = async input => {
-    this.setState({ loading: true });
     try {
-      const fotoObj = await API.addFotoObj(input, this.state.pageNumber);
-
+      const fotoObj = await API.addFotoObj(inputSearch, pageNumber);
+   
       // Проверка на первую загрузку галереи
-      if (this.state.response.length === 0) {
-        this.setState({
-          response: fotoObj,
-          errorMessage: false,
-          isLoading: false
-          
-        });
-
-        // Если нет результата запроса, покажем уведомление
-        if (fotoObj.length === 0) {
-          this.setState({
-            errorMessage: true,
-          });
-        }
+      if (response.length === 0) {
+        setResponse(fotoObj);
+        setErrorMessage(false);
+        setIsLoading(false);
       }
+
+      // Если нет результата запроса, покажем уведомление
+      if (fotoObj.length === 0) {
+      setErrorMessage(true);
+      setIsLoading(false);}
       // Добавляем новые обьекты к уже находящимся в State
       else {
-        this.setState(prevState => ({
-          response: [...prevState.response, ...fotoObj],
-          isLoading: false
-        }));
+        setResponse([...response, ...fotoObj]);
       }
       // Проверка на конец галереи
-      if (fotoObj.length === 12) {
-        this.setState({
-          button: true,
-        });
-      }
+      if (fotoObj.length === 12) setButton(true);
     } catch (error) {
       console.log(error);
     } finally {
-      this.setState({
-        loading: false,
-      });
+      setIsLoading(false);
     }
   };
 
-  loadMore = () => {
-    // добавляем +1 страницу к запросу
-    this.setState(prevState => ({
-      pageNumber: prevState.pageNumber + 1,
-    }));
+  const loadMore = () => {
+    setPageNumber(pageNumber + 1);
   };
 
-  handleModal = event => {
+  const handleModal = event => {
     if (event === 'Escape' || event === undefined) {
-      this.setState({ modal: false });
+      setModal(false);
     }
   };
 
-  onImageClick = largeImage => {
-    this.setState({
-      modal: true,
-      largeImageUrl: largeImage,
-    });
+  const onImageClick = largeImage => {
+    setModal(true);
+    setLargeImageUrl(largeImage);
   };
 
-  cleanState = () => {
-     this.setState({
-      response: [],
-      pageNumber: 1,
-      button: false,
-    });
+  const cleanState = () => {
+    setResponse([]);
+    setPageNumber(1);
+    setButton(false);
   };
 
- componentDidUpdate(prevProps, prevState) {
-   const { pageNumber, inputSearch } = this.state;
-   
-    if (
-        prevState.pageNumber !== pageNumber ||
-        prevState.inputSearch !== inputSearch
-    ) {
-      if (!this.state.isLoading) {
-        this.setState({isLoading: true}, () => {
-          this.getFotos(inputSearch);
-        });
-      }
+  useEffect(() => {
+    if (inputSearch === '') {
+          return;
     }
-}
+    getFotos(inputSearch);
+  }, [pageNumber, inputSearch]);
 
-  render() {
-    const { loading, response, largeImageUrl, button, modal, errorMessage } =
-      this.state;
-    return (
-      <div className={css.App}>
-        <Searchbar clickSubmit={this.formSubmitHandler} />
+  return (
+    <div className={css.App}>
+      <Searchbar clickSubmit={formSubmitHandler} />
 
-        <Loader color="#4578e9" loading={loading} size={150} />
+      <Loader color="#4578e9" loading={isLoading} size={150} />
 
-        {response && (
-          <ImageGallery images={response} clickImage={this.onImageClick} />
-        )}
+      {response && <ImageGallery images={response} clickImage={onImageClick} />}
 
-        {errorMessage && <Errors />}
+      {errorMessage && <Errors />}
 
-        {button && <Button clickMore={this.loadMore} />}
+      {button && <Button clickMore={loadMore} />}
 
-        {modal && (
-          <Modal clickModal={this.handleModal} imgUrl={largeImageUrl} />
-        )}
-      </div>
-    );
-  }
-}
+      {modal && <Modal clickModal={handleModal} imgUrl={largeImageUrl} />}
+    </div>
+  );
+};
+
+export default App;

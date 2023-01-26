@@ -1,8 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
 const Modal = ({ clickModal, imgUrl }) => {
+
+useEffect(() => {
+  window.addEventListener('keydown', e => clickModal(e.code))
+
+  return () => {
+    window.removeEventListener('keydown', e => clickModal(e.code));
+  }
+}, [clickModal])
+
+
   return (
     <div className={css.overlay} onClick={e => clickModal(e.code)}>
       <div className={css.modal}>

@@ -5,9 +5,9 @@ import css from './Searchbar.module.css';
 const Searchbar = ({ clickSubmit }) => {
   const [input, setInput] = useState('');
 
-  const handleChange = ({ value }) => {
-    setInput(value);
-  };
+  const handleChange = (e) => {
+    setInput(e.target.value);
+   };
 
   const handleSubmit = e => {
     e.preventDefault();
