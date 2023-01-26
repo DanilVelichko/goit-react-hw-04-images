@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from './Modal/Modal';
 import css from './App.module.css';
 import Loader from './Loader/Loader';
