@@ -23,11 +23,11 @@ const App = () => {
     setInputSearch(input);
   };
 
-  const getFotos = async () => {
+  const getFotos = async (input, page) => {
     setIsLoading(true);
 
     try {
-      const fotoObj = await API.addFotoObj(inputSearch, pageNumber);
+      const fotoObj = await API.addFotoObj(input, page);
    
       // Проверка на первую загрузку галереи
       if (response.length === 0) {
@@ -68,7 +68,7 @@ const App = () => {
     setLargeImageUrl(largeImage);
   };
 
-  const cleanState = () => {
+  function cleanState() {
     setResponse([]);
     setPageNumber(1);
     setButton(false);
@@ -77,9 +77,9 @@ const App = () => {
   useEffect(() => {
     if (inputSearch === '') {
           return;
-    }
-    getFotos(inputSearch);
-  }, [pageNumber, inputSearch]);
+    } else
+    getFotos(inputSearch, pageNumber);
+  }, [pageNumber, inputSearch, getFotos]);
 
   return (
     <div className={css.App}>
