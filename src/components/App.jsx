@@ -79,7 +79,8 @@ const App = () => {
           return;
     } else
     getFotos(inputSearch, pageNumber);
-  }, [pageNumber, inputSearch, getFotos]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pageNumber, inputSearch]);
 
   return (
     <div className={css.App}>
