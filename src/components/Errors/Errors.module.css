@@ -1,0 +1,12 @@
+/*
+ * Стили компонента ImageGallery
+ */
+.errors_box {
+  display: flex;
+  align-items: center;
+ justify-content: center;
+}
+
+.errors_text {
+
+}
