@@ -23,7 +23,7 @@ const App = () => {
     setInputSearch(input);
   };
 
-  const getFotos = async input => {
+  const getFotos = async () => {
     setIsLoading(true);
 
     try {
