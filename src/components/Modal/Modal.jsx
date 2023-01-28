@@ -12,7 +12,6 @@ useEffect(() => {
   }
 }, [clickModal])
 
-
   return (
     <div className={css.overlay} onClick={e => clickModal(e.code)}>
       <div className={css.modal}>

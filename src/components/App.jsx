@@ -35,17 +35,20 @@ const App = () => {
         setErrorMessage(false);
         setIsLoading(false);
       }
-
-      // Если нет результата запроса, покажем уведомление
-      if (fotoObj.length === 0) {
-      setErrorMessage(true);
-      setIsLoading(false);}
+   
       // Добавляем новые обьекты к уже находящимся в State
       else {
-        setResponse([...response, ...fotoObj]);
+        setResponse(prev => [...prev, ...fotoObj]);
       }
       // Проверка на конец галереи
       if (fotoObj.length === 12) setButton(true);
+
+         // Если нет результата запроса, покажем уведомление
+      if (fotoObj.length === 0) {
+      setErrorMessage(true);
+        setIsLoading(false);
+      }
+      
     } catch (error) {
       console.log(error);
     } finally {
@@ -88,7 +91,7 @@ const App = () => {
 
       <Loader color="#4578e9" loading={isLoading} size={150} />
 
-      {response && <ImageGallery images={response} clickImage={onImageClick} />}
+      {response.length > 0 && <ImageGallery images={response} clickImage={onImageClick} />}
 
       {errorMessage && <Errors />}
 
