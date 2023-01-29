@@ -5,17 +5,19 @@ import css from './Modal.module.css';
 const Modal = ({ clickModal, imgUrl }) => {
 
 useEffect(() => {
-  window.addEventListener('keydown', e => clickModal(e.code))
+  window.addEventListener('keydown', clickModal)
+
+  
 
   return () => {
-    window.removeEventListener('keydown', e => clickModal(e.code));
+    window.removeEventListener('keydown', clickModal);
   }
 }, [clickModal])
 
   return (
-    <div className={css.overlay} onClick={e => clickModal(e.code)}>
+    <div className={css.overlay} onClick={clickModal}>
       <div className={css.modal}>
-        <img src={imgUrl} alt="" onClick={e => e.stopPropagation()} />
+        <img src={imgUrl} alt="" onClick={clickModal} />
       </div>
     </div>
   );

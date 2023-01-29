@@ -56,11 +56,13 @@ const App = () => {
   };
 
   const loadMore = () => {
-    setPageNumber(pageNumber + 1);
+    setPageNumber( prev => prev + 1);
   };
 
-  const handleModal = event => {
-    if (event === 'Escape' || event === undefined) {
+  const handleModal = ({ key, target }) => {
+
+    if (key === 'Escape'  || target.tagName === 'DIV')  {
+    
       setModal(false);
     }
   };
